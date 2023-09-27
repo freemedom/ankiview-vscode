@@ -10,6 +10,9 @@ export class AnkiViewViewProvider implements vscode.WebviewViewProvider {
 
 	private _view?: vscode.WebviewView;
 	private _ankiCodeBar: CodeBar.CodeBar;
+	private isShowBackCard: Boolean;
+
+
 
 	constructor(
 		private readonly _ankiConnect: AnkiConnect.AnkiConnect,
@@ -18,6 +21,7 @@ export class AnkiViewViewProvider implements vscode.WebviewViewProvider {
 	) {
 		_context.subscriptions.push(vscode.window.registerWebviewViewProvider(AnkiViewViewProvider.viewType, this));
 		this._ankiCodeBar = ankiTimeBar;
+		this.isShowBackCard = false;
 	}
 
 	private async codeViewKeyHandler(data: any) {
@@ -29,6 +33,11 @@ export class AnkiViewViewProvider implements vscode.WebviewViewProvider {
 				await vscode.commands.executeCommand('ankiview.command.sideview.answerCardEase' + data.key);
 				break;
 			case ' ':
+			case 'Enter':
+				if(this.isShowBackCard){
+					await vscode.commands.executeCommand('ankiview.command.sideview.answerCardEase' + "3");
+					break;
+				}
 				await vscode.commands.executeCommand('ankiview.command.sideview.showAnswer');
 				break;
 			case 'z':
@@ -106,6 +115,8 @@ export class AnkiViewViewProvider implements vscode.WebviewViewProvider {
 	public async showAnswer() {
 		// console.log("CodeView: showAnswer");
 		try {
+			this.isShowBackCard = true;
+
 			let card = await this._ankiConnect.api.graphical.guiCurrentCard();
 			let html = card.result.answer;
 			let ankiHtml = await this.replaceResource(html);
@@ -133,6 +144,8 @@ export class AnkiViewViewProvider implements vscode.WebviewViewProvider {
 	public async showQuestion() {
 		// console.log("CodeView: showQuestion");
 		try {
+			this.isShowBackCard = false;
+
 			let card = await this._ankiConnect.api.graphical.guiCurrentCard();
 			let html = card.result.question;
 			let ankiHtml = await this.replaceResource(html);
