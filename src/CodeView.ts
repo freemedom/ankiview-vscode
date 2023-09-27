@@ -4,6 +4,7 @@ import * as CodeBar from './CodeBar';
 
 const ankiviewPluginId = "ankiview";
 
+
 export class AnkiViewViewProvider implements vscode.WebviewViewProvider {
 
 	public static readonly viewType = 'ankiview.view.sideview';
@@ -11,6 +12,7 @@ export class AnkiViewViewProvider implements vscode.WebviewViewProvider {
 	private _view?: vscode.WebviewView;
 	private _ankiCodeBar: CodeBar.CodeBar;
 	private isShowBackCard: Boolean;
+	private ankiHtml: String;
 
 
 
@@ -22,6 +24,7 @@ export class AnkiViewViewProvider implements vscode.WebviewViewProvider {
 		_context.subscriptions.push(vscode.window.registerWebviewViewProvider(AnkiViewViewProvider.viewType, this));
 		this._ankiCodeBar = ankiTimeBar;
 		this.isShowBackCard = false;
+		this.ankiHtml = "";
 	}
 
 	private async codeViewKeyHandler(data: any) {
@@ -47,6 +50,15 @@ export class AnkiViewViewProvider implements vscode.WebviewViewProvider {
 			default:
 				break;
 		}
+	}
+
+	private async convertHtmlToMarkdown() {
+		console.log('🌾this.ankiHtml', this.ankiHtml);
+				// TODO
+
+		console.log('🥪markdownContent', markdownContent);
+
+		return markdownContent;
 	}
 
 	private async codeViewHandler(data: any) {
@@ -120,6 +132,9 @@ export class AnkiViewViewProvider implements vscode.WebviewViewProvider {
 			let card = await this._ankiConnect.api.graphical.guiCurrentCard();
 			let html = card.result.answer;
 			let ankiHtml = await this.replaceResource(html);
+
+			this.ankiHtml = ankiHtml;
+			
 			let cardHtml = `
 			<anki class="ankiview-answer">
 			${ankiHtml}
@@ -149,6 +164,9 @@ export class AnkiViewViewProvider implements vscode.WebviewViewProvider {
 			let card = await this._ankiConnect.api.graphical.guiCurrentCard();
 			let html = card.result.question;
 			let ankiHtml = await this.replaceResource(html);
+
+			this.ankiHtml = ankiHtml;
+
 			let cardHtml = `
 			<anki class="ankiview-question">
 			${ankiHtml}
@@ -268,5 +286,24 @@ export class AnkiViewViewProvider implements vscode.WebviewViewProvider {
 		}
 		this.showQuestion();
 		return true;
+	}
+
+
+	public async insertMarkDown() {
+		const editor = vscode.window.activeTextEditor;
+
+		let markDownContent = await this.convertHtmlToMarkdown();
+
+
+		if (typeof markDownContent !== 'string') {
+			markDownContent = "";
+		}
+
+		if (editor) {
+			const currentPosition = editor.selection.active;
+			editor.edit((editBuilder) => {
+				editBuilder.insert(currentPosition, markDownContent);
+			});
+		}
 	}
 }

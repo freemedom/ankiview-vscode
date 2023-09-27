@@ -184,6 +184,17 @@ class SideviewUndo extends VscodeCommand {
     }
 }
 
+class SideviewInsertMarkDown extends VscodeCommand {
+    protected _command = "ankiview.command.sideview.insertMarkDown";
+
+    protected error(err: unknown) {
+    }
+
+    protected async callback() {
+        await this.ankiProvider.insertMarkDown();
+    }
+}
+
 let commandList = [
     // Miscellaneous
     MiscellaneousVersion,
@@ -199,6 +210,7 @@ let commandList = [
     SideviewAnswerCardEase3,
     SideviewAnswerCardEase4,
     SideviewUndo,
+    SideviewInsertMarkDown
 ];
 
 export function registCommand(ankiConnect: AnkiConnect.AnkiConnect,
