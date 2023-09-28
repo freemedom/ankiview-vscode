@@ -73,6 +73,10 @@
           "command": "ankiview.command.sideview.undo",
           "when": "webviewId == 'ankiview.view.sideview'",
           "group": "ankiview"
+        },
+        {
+          "command": "ankiview.command.sideview.insertMarkDown",
+          "title": "AnkiView: Insert Markdown into Their Documents."
         }
       ]
     },
@@ -100,6 +104,10 @@
           "light": "./resources/light/refresh.svg",
           "dark": "./resources/dark/refresh.svg"
         }
+      },
+      {
+        "command": "ankiview.command.sideview.insertMarkDown",
+        "title": "AnkiView: Insert Markdown into Their Documents."
       },
       {
         "command": "ankiview.command.sideview.showAnswer",
@@ -210,6 +218,7 @@
   },
   "dependencies": {
     "axios": "^1.4.0",
-    "p-limit": "^4.0.0"
+    "p-limit": "^4.0.0",
+    "turndown": "^7.1.2"
   }
 }

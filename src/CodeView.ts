@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as AnkiConnect from './AnkiConnect';
 import * as CodeBar from './CodeBar';
+import TurndownService from 'turndown';
 
 const ankiviewPluginId = "ankiview";
 
@@ -53,11 +54,8 @@ export class AnkiViewViewProvider implements vscode.WebviewViewProvider {
 	}
 
 	private async convertHtmlToMarkdown() {
-		console.log('🌾this.ankiHtml', this.ankiHtml);
-				// TODO
-
-		console.log('🥪markdownContent', markdownContent);
-
+		let turndownService = new TurndownService();
+		let markdownContent = turndownService.turndown(this.ankiHtml);
 		return markdownContent;
 	}
 
