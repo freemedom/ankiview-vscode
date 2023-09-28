@@ -33,6 +33,11 @@
     "menus": {
       "view/title": [
         {
+          "command": "ankiview.command.sideview.insertMarkDown",
+          "when": "view == 'ankiview.view.sideview'",
+          "group": "navigation"
+        },
+        {
           "command": "ankiview.command.sideview.showQuestion",
           "when": "view == 'ankiview.view.sideview'",
           "group": "navigation"
@@ -76,7 +81,7 @@
         },
         {
           "command": "ankiview.command.sideview.insertMarkDown",
-          "title": "AnkiView: Insert Markdown into Their Documents."
+          "title": "AnkiView: Insert Markdown into Documents."
         }
       ]
     },
@@ -107,7 +112,11 @@
       },
       {
         "command": "ankiview.command.sideview.insertMarkDown",
-        "title": "AnkiView: Insert Markdown into Their Documents."
+        "title": "AnkiView: Insert Markdown into Documents.",
+        "icon": {
+          "light": "./resources/light/insert.svg",
+          "dark": "./resources/dark/insert.svg"
+        }
       },
       {
         "command": "ankiview.command.sideview.showAnswer",
