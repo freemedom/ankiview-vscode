@@ -55,7 +55,11 @@ export class AnkiViewViewProvider implements vscode.WebviewViewProvider {
 
 	private async convertHtmlToMarkdown() {
 		let turndownService = new TurndownService();
-		let markdownContent = turndownService.turndown(this.ankiHtml);
+
+		// remove <style></style>
+		let pureHTML = this.ankiHtml.replace(/<style[\s\S]*?<\/style>/g, '');
+
+		let markdownContent = turndownService.turndown(pureHTML);
 		return markdownContent;
 	}
 
